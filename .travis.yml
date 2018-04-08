@@ -1,0 +1,11 @@
+language: go
+
+go:
+  - "1.10.x"
+  - "1.x"
+  - master
+
+# using dep for dependency management
+install:
+  - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+  - dep ensure
