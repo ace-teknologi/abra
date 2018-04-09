@@ -2,30 +2,26 @@
 
 
 [[projects]]
-  branch = "master"
-  name = "github.com/achiku/soapc"
+  name = "github.com/inconshreveable/mousetrap"
   packages = ["."]
-  revision = "cfbdfe6e4caffe57a9cba89996e8b1cedb512be0"
+  revision = "76626ae9c91c4f2a10f34cad8ce83ea42c93bb75"
+  version = "v1.0"
 
 [[projects]]
-  name = "github.com/aws/aws-lambda-go"
-  packages = [
-    "lambda",
-    "lambda/messages",
-    "lambdacontext"
-  ]
-  revision = "6e2e37798efbb1dfd8e9c6681702e683a6046517"
-  version = "v1.0.1"
+  name = "github.com/spf13/cobra"
+  packages = ["."]
+  revision = "a1f051bc3eba734da4772d60e2d677f47cf93ef4"
+  version = "v0.0.2"
 
 [[projects]]
-  name = "github.com/pkg/errors"
+  name = "github.com/spf13/pflag"
   packages = ["."]
-  revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
-  version = "v0.8.0"
+  revision = "e57e3eeb33f795204c1ca35f56c44f83227c6e66"
+  version = "v1.0.0"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "988293d5f80d7ce7bda28ffa0951fe0f34af5252496197a26f5e203701fb82e2"
+  inputs-digest = "cf6ae3f7201cb22f69bfa2bc9ce6c23babbb9196b4127b1169ff393893e417e8"
   solver-name = "gps-cdcl"
   solver-version = 1

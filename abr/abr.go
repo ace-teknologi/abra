@@ -47,14 +47,6 @@ type HumanName struct {
 	EffectiveTo   abnDate `xml:"effectiveTo"`
 }
 
-// ABN represents an actual Australian Business Number
-type ABN struct {
-	IdentifierValue         string  `xml:"identifierValue,omitempty"`
-	IsCurrentIndicator      string  `xml:"isCurrentIndicator,omitempty"`
-	ReplacedIdentifierValue string  `xml:"replacedIdentifierValue,omitempty"`
-	ReplacedFrom            abnDate `xml:"replacedFrom,omitempty"`
-}
-
 // Address details represents an address used by a BusinessEntity for a period
 // of time
 type AddressDetails struct {
