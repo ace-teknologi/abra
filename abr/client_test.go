@@ -14,7 +14,7 @@ func init() {
 }
 
 func TestABRClient(t *testing.T) {
-	client, err := New()
+	client, err := NewClient()
 	if err != nil {
 		t.Error(err)
 		return
@@ -30,10 +30,10 @@ func TestABRClientNoEnvSet(t *testing.T) {
 	os.Unsetenv("ABR_GUID")
 	defer os.Setenv("ABR_GUID", guid)
 
-	_, err := New()
+	_, err := NewClient()
 	if err == nil {
 		t.Errorf("Expected an error, none was raised")
-	} else if err.Error() != missingGUIDError {
+	} else if err.Error() != MissingGUIDError {
 		t.Error(err)
 	}
 
@@ -50,7 +50,7 @@ var abnTestCases = []struct {
 }
 
 func TestSearchByABNv201408(t *testing.T) {
-	client, err := New()
+	client, err := NewClient()
 	if err != nil {
 		t.Error(err)
 		return

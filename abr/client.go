@@ -17,7 +17,8 @@ import (
 const (
 	BaseURL          = "https://www.abn.business.gov.au/abrxmlsearch/ABRXMLSearch.asmx/"
 	contentType      = "application/json"
-	missingGUIDError = "The ABR_GUID environment variable must be set"
+	GUIDEnvName      = "ABR_GUID"
+	MissingGUIDError = "The ABR_GUID environment variable must be set"
 	userAgent        = "go-abn v0.0.0"
 )
 
@@ -67,13 +68,19 @@ type Client struct {
 	httpClient *http.Client
 }
 
-// New returns a pointer to an initialized instance of a Client
-func New() (*Client, error) {
-	guid, ok := os.LookupEnv("ABR_GUID")
+// NewClient returns a pointer to an initialized instance of a Client
+func NewClient() (*Client, error) {
+	guid, ok := os.LookupEnv(GUIDEnvName)
 	if !ok {
-		return nil, errors.New(missingGUIDError)
+		return nil, errors.New(MissingGUIDError)
 	}
 
+	return NewWithGuid(guid)
+}
+
+// NewClientWithGuid returns a pointer to an initalized instance of a Client,
+// configured with a GUID
+func NewWithGuid(guid string) (*Client, error) {
 	rawurl, ok := os.LookupEnv("ABR_ENDPOINT")
 	if !ok {
 		rawurl = BaseURL
@@ -92,8 +99,17 @@ func New() (*Client, error) {
 	return client, nil
 }
 
+// SearchByABN is an alias for SearchByABNv201408
+func (c *Client) SearchByABN(abn string, hist bool) (*BusinessEntity, error) {
+	return c.SearchByABNv201408(abn, hist)
+}
+
 // SearchByABNv201408 wraps the API call to query an ABN
 func (c *Client) SearchByABNv201408(abn string, hist bool) (*BusinessEntity, error) {
+	if ok, err := ValidateABN(abn); !ok {
+		return nil, fmt.Errorf(err)
+	}
+
 	data := url.Values{}
 	data.Set("authenticationGuid", c.GUID)
 	if hist {
@@ -158,7 +174,6 @@ func (c *Client) do(req *http.Request, v interface{}) (*http.Response, error) {
 		return nil, err
 	}
 
-	log.Printf("[DEBUG] status %v dumping raw data:\n%+v\n", resp.StatusCode, string(data))
 	err = xml.Unmarshal(data, v)
 
 	return resp, err
