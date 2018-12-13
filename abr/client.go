@@ -186,7 +186,6 @@ func (c *Client) SearchByASICv201408(acn string, hist bool) (*BusinessEntity, er
 	return resp.Response.BusinessEntity201408, nil
 }
 
-
 func (c *Client) newRequest(method, path string, body io.Reader) (*http.Request, error) {
 	rel, _ := url.Parse(path)
 	u := c.BaseURL.ResolveReference(rel)

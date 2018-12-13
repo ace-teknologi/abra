@@ -50,7 +50,7 @@ var abnTestCases = []struct {
 }
 
 var asicTestCases = []struct {
-	abn string
+	abn  string
 	acn  string
 	name string
 }{
@@ -103,6 +103,10 @@ func TestSearchByASICv201408(t *testing.T) {
 
 		if entity.ABN() != c.abn {
 			t.Errorf("Expected %v, got %v", c.abn, entity.ABN())
+		}
+
+		if entity.ASICNumber != c.acn {
+			t.Errorf("Expected %v, got %v", c.acn, entity.ASICNumber)
 		}
 	}
 	return
