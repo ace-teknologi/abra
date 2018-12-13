@@ -140,6 +140,53 @@ func (c *Client) SearchByABNv201408(abn string, hist bool) (*BusinessEntity, err
 	return resp.Response.BusinessEntity201408, nil
 }
 
+// SearchByACN is an alias for SearchByASICv201408
+func (c *Client) SearchByACN(abn string, hist bool) (*BusinessEntity, error) {
+	return c.SearchByASICv201408(abn, hist)
+}
+
+// SearchByASIC is an alias for SearchByASICv201408
+func (c *Client) SearchByASIC(abn string, hist bool) (*BusinessEntity, error) {
+	return c.SearchByASICv201408(abn, hist)
+}
+
+// SearchByASICv201408 wraps the API call to query an ACN
+func (c *Client) SearchByASICv201408(acn string, hist bool) (*BusinessEntity, error) {
+	if ok, err := ValidateACN(acn); !ok {
+		return nil, fmt.Errorf(err)
+	}
+
+	data := url.Values{}
+	data.Set("authenticationGuid", c.GUID)
+	if hist {
+		data.Add("includeHistoricalDetails", "Y")
+	} else {
+		data.Add("includeHistoricalDetails", "N")
+	}
+	data.Add("searchString", acn)
+
+	req, err := c.newRequest("POST", "SearchByASICv201408", strings.NewReader(data.Encode()))
+	if err != nil {
+		return nil, err
+	}
+
+	resp := Payload{}
+
+	_, err = c.do(req, &resp)
+	if err != nil {
+		return nil, err
+	}
+
+	// ABR returns a 200 response for some exceptions. Check for these.
+	if resp.Response.Exception != nil {
+		log.Printf("[ERROR] %v\n", resp.Response.Exception.ExceptionDescription)
+		return nil, fmt.Errorf(resp.Response.Exception.ExceptionDescription)
+	}
+
+	return resp.Response.BusinessEntity201408, nil
+}
+
+
 func (c *Client) newRequest(method, path string, body io.Reader) (*http.Request, error) {
 	rel, _ := url.Parse(path)
 	u := c.BaseURL.ResolveReference(rel)
