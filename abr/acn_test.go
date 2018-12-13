@@ -10,9 +10,9 @@ func init() {
 var validACNs = []struct {
 	acn string
 }{
-	{"000 000 019"},
-	{"000 250 000"},
-	{"000 500 005"},
+	{"0 0 0 0 0 0 0 1 9"},
+	{"00 02 50 00 0"},
+	{"00 0 5 00 00 5"},
 	{"000 750 005"},
 	{"001 000 004"},
 	{"001 250 004"},
@@ -105,6 +105,7 @@ var invalidACNs = []struct {
 	{"010749962"},
 	{"ONE"},
 	{"010 749 962 Z"},
+  {""},
 }
 
 func TestValidateACNWithValidACNs(t *testing.T) {
