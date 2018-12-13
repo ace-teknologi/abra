@@ -105,7 +105,7 @@ var invalidACNs = []struct {
 	{"010749962"},
 	{"ONE"},
 	{"010 749 962 Z"},
-  {""},
+	{""},
 }
 
 func TestValidateACNWithValidACNs(t *testing.T) {
