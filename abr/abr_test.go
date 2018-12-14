@@ -38,6 +38,16 @@ var HumanNames = []*HumanName{
   {GivenName: "Jack", FamilyName: "John"},
 }
 
+var MultipleABNs = []*ABN{
+  {IdentifierValue: "99124391073", IsCurrentIndicator: "N"},
+  {IdentifierValue: "99124391074", IsCurrentIndicator: "Y"},
+  {IdentifierValue: "99124391073", IsCurrentIndicator: "N"},
+}
+
+var SingleABN = []*ABN{
+  {IdentifierValue: "99124391073", IsCurrentIndicator: "Y"},
+}
+
 func TestNameWithAllNames(t *testing.T) {
   businessEntity := BusinessEntity{
     BusinessNames: BusinessNames,
@@ -106,4 +116,28 @@ func TestNameWithNoMainNamesOrMainTradingNamesOrOtherTradingNamesOrBusinessNames
   }
 
 	return
+}
+
+func TestABNWithMultiple(t *testing.T) {
+  businessEntity := BusinessEntity{
+    ABNs: MultipleABNs,
+  }
+
+  if businessEntity.ABN() != "99124391074" {
+    t.Errorf("Expected %v, got %v", "99124391074", businessEntity.ABN())
+  }
+
+  return
+}
+
+func TestABNWithSingle(t *testing.T) {
+  businessEntity := BusinessEntity{
+    ABNs: SingleABN,
+  }
+
+  if businessEntity.ABN() != "99124391073" {
+    t.Errorf("Expected %v, got %v", "99124391073", businessEntity.ABN())
+  }
+
+  return
 }
