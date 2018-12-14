@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ABRPayloadSearchResults xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://abr.business.gov.au/ABRXMLSearch/">
+  <request>
+    <identifierSearchRequest>
+      <authenticationGUID>TEST_ABR_GUID</authenticationGUID>
+      <identifierType>ABN</identifierType>
+      <identifierValue>99124391073</identifierValue>
+      <history>Y</history>
+    </identifierSearchRequest>
+  </request>
+  <response>
+    <usageStatement>The Registrar of the ABR monitors the quality of the information available on this website and updates the information regularly. However, neither the Registrar of the ABR nor the Commonwealth guarantee that the information available through this service (including search results) is accurate, up to date, complete or accept any liability arising from the use of or reliance upon this site.</usageStatement>
+    <dateRegisterLastUpdated>2018-12-14</dateRegisterLastUpdated>
+    <dateTimeRetrieved>2018-12-14T22:54:50.2411076+11:00</dateTimeRetrieved>
+    <businessEntity201408>
+      <recordLastUpdatedDate>2014-01-23</recordLastUpdatedDate>
+      <ABN>
+        <identifierValue>99124391073</identifierValue>
+        <isCurrentIndicator>Y</isCurrentIndicator>
+        <replacedFrom>0001-01-01</replacedFrom>
+      </ABN>
+      <entityStatus>
+        <entityStatusCode>Active</entityStatusCode>
+        <effectiveFrom>2007-03-14</effectiveFrom>
+        <effectiveTo>0001-01-01</effectiveTo>
+      </entityStatus>
+      <ASICNumber>124391073</ASICNumber>
+      <entityType>
+        <entityTypeCode>PRV</entityTypeCode>
+        <entityDescription>Australian Private Company</entityDescription>
+      </entityType>
+      <goodsAndServicesTax>
+        <effectiveFrom>2007-03-14</effectiveFrom>
+        <effectiveTo>0001-01-01</effectiveTo>
+      </goodsAndServicesTax>
+      <mainName>
+        <organisationName>COzero Pty Ltd</organisationName>
+        <effectiveFrom>2007-03-14</effectiveFrom>
+      </mainName>
+      <mainBusinessPhysicalAddress>
+        <stateCode>NSW</stateCode>
+        <postcode>2000</postcode>
+        <effectiveFrom>2011-04-13</effectiveFrom>
+        <effectiveTo>0001-01-01</effectiveTo>
+      </mainBusinessPhysicalAddress>
+      <mainBusinessPhysicalAddress>
+        <stateCode>NSW</stateCode>
+        <postcode>2150</postcode>
+        <effectiveFrom>2011-04-11</effectiveFrom>
+        <effectiveTo>2011-04-13</effectiveTo>
+      </mainBusinessPhysicalAddress>
+      <mainBusinessPhysicalAddress>
+        <stateCode>NSW</stateCode>
+        <postcode>2000</postcode>
+        <effectiveFrom>2007-03-14</effectiveFrom>
+        <effectiveTo>2011-04-11</effectiveTo>
+      </mainBusinessPhysicalAddress>
+    </businessEntity201408>
+  </response>
+</ABRPayloadSearchResults>
