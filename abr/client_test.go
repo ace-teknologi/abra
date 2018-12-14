@@ -49,6 +49,15 @@ var abnTestCases = []struct {
 	{"65433405893", "STUART J AULD"},
 }
 
+var asicTestCases = []struct {
+	abn  string
+	acn  string
+	name string
+}{
+	{"78159033075", "159033075", "ENERGYLINK GLOBAL PTY LTD"},
+	{"26154482283", "154482283", "Oneflare Pty Ltd"},
+}
+
 func TestSearchByABNv201408(t *testing.T) {
 	client, err := NewClient()
 	if err != nil {
@@ -69,6 +78,35 @@ func TestSearchByABNv201408(t *testing.T) {
 
 		if entity.ABN() != c.abn {
 			t.Errorf("Expected %v, got %v", c.abn, entity.ABN())
+		}
+	}
+	return
+}
+
+func TestSearchByASICv201408(t *testing.T) {
+	client, err := NewClient()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	for _, c := range asicTestCases {
+		entity, err := client.SearchByASICv201408(c.acn, true)
+		if err != nil {
+			t.Error(err)
+			continue
+		}
+
+		if entity.Name() != c.name {
+			t.Errorf("Expected %v, got %v", c.name, entity.Name())
+		}
+
+		if entity.ABN() != c.abn {
+			t.Errorf("Expected %v, got %v", c.abn, entity.ABN())
+		}
+
+		if entity.ASICNumber != c.acn {
+			t.Errorf("Expected %v, got %v", c.acn, entity.ASICNumber)
 		}
 	}
 	return

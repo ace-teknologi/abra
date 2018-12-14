@@ -17,7 +17,7 @@ var GUID string
 
 var rootCmd = &cobra.Command{
 	Use:   "goabn",
-	Short: "Goabn looks up an ABN using the ABR",
+	Short: "Goabn looks up an ABN or ACN using the ABR",
 	Long: `A command line interface to the Australian Business Register.
             More information available at https://github.com/sjauld/go-abn`,
 	RunE: func(cmd *cobra.Command, arg []string) error {
