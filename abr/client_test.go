@@ -1,16 +1,47 @@
 package abr
 
 import (
+	"io/ioutil"
+	"net/http"
+	"net/url"
 	"os"
+	"path/filepath"
 	"testing"
+
+	"github.com/h2non/gock"
 )
 
+const TEST_ABR_GUID = "TEST_ABR_GUID"
+
 func init() {
-	guid, ok := os.LookupEnv("TEST_ABR_GUID")
-	if !ok {
-		panic("You must set TEST_ABR_GUID in order to run tests")
+	os.Setenv("ABR_GUID", TEST_ABR_GUID)
+}
+
+func TestSimple(t *testing.T) {
+	defer gock.Off()
+
+	gock.New("http://foo.com").
+		Get("/bar").
+		Reply(200).
+		JSON(map[string]string{"foo": "bar"})
+
+	res, err := http.Get("http://foo.com/bar")
+	if err != nil {
+		t.Errorf("Expected %v, got %v", nil, err)
 	}
-	os.Setenv("ABR_GUID", guid)
+	if res.StatusCode != 200 {
+		t.Errorf("Expected %v, got %v", 200, res.StatusCode)
+	}
+
+	body, _ := ioutil.ReadAll(res.Body)
+	if string(body)[:13] != `{"foo":"bar"}` {
+		t.Errorf("Expected %v, got %v", `{"foo":"bar"}`, string(body)[:13])
+	}
+
+	// Verify that we don't have pending mocks
+	if !gock.IsDone() {
+		t.Errorf("Expected %v, got %v", true, gock.IsDone())
+	}
 }
 
 func TestABRClient(t *testing.T) {
@@ -41,24 +72,28 @@ func TestABRClientNoEnvSet(t *testing.T) {
 }
 
 var abnTestCases = []struct {
-	abn  string
-	name string
+	abn      string
+	name     string
+	filename string
 }{
-	{"99124391073", "COzero Pty Ltd"},
-	{"26154482283", "Oneflare Pty Ltd"},
-	{"65433405893", "STUART J AULD"},
+	{"99124391073", "COzero Pty Ltd", "abn/200/99124391073.xml"},
+	{"26154482283", "Oneflare Pty Ltd", "abn/200/26154482283.xml"},
+	{"65433405893", "STUART J AULD", "abn/200/65433405893.xml"},
 }
 
 var asicTestCases = []struct {
-	abn  string
-	acn  string
-	name string
+	abn      string
+	acn      string
+	name     string
+	filename string
 }{
-	{"78159033075", "159033075", "ENERGYLINK GLOBAL PTY LTD"},
-	{"26154482283", "154482283", "Oneflare Pty Ltd"},
+	{"78159033075", "159033075", "ENERGYLINK GLOBAL PTY LTD", "acn/200/159033075.xml"},
+	{"26154482283", "154482283", "Oneflare Pty Ltd", "acn/200/154482283.xml"},
 }
 
 func TestSearchByABNv201408(t *testing.T) {
+	defer gock.Off()
+
 	client, err := NewClient()
 	if err != nil {
 		t.Error(err)
@@ -66,6 +101,19 @@ func TestSearchByABNv201408(t *testing.T) {
 	}
 
 	for _, c := range abnTestCases {
+		body, err := ioutil.ReadFile(filepath.Join("testdata", c.filename))
+		reqBody := url.Values{}
+		reqBody.Set("authenticationGuid", TEST_ABR_GUID)
+		reqBody.Add("includeHistoricalDetails", "Y")
+		reqBody.Add("searchString", c.abn)
+
+		gock.New("https://www.abn.business.gov.au/").
+			Post("/abrxmlsearch/ABRXMLSearch.asmx/SearchByABNv201408").
+			MatchType("url").
+			BodyString(reqBody.Encode()).
+			Reply(200).
+			BodyString(string(body))
+
 		entity, err := client.SearchByABNv201408(c.abn, true)
 		if err != nil {
 			t.Error(err)
@@ -91,6 +139,19 @@ func TestSearchByASICv201408(t *testing.T) {
 	}
 
 	for _, c := range asicTestCases {
+		body, err := ioutil.ReadFile(filepath.Join("testdata", c.filename))
+		reqBody := url.Values{}
+		reqBody.Set("authenticationGuid", TEST_ABR_GUID)
+		reqBody.Add("includeHistoricalDetails", "Y")
+		reqBody.Add("searchString", c.acn)
+
+		gock.New("https://www.abn.business.gov.au/").
+			Post("/abrxmlsearch/ABRXMLSearch.asmx/SearchByASICv201408").
+			MatchType("url").
+			BodyString(reqBody.Encode()).
+			Reply(200).
+			BodyString(string(body))
+
 		entity, err := client.SearchByASICv201408(c.acn, true)
 		if err != nil {
 			t.Error(err)

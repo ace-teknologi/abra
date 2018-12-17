@@ -1,6 +1,7 @@
 package abr
 
 import (
+	"bytes"
 	"encoding/xml"
 	"errors"
 	"fmt"
@@ -205,6 +206,9 @@ func (c *Client) newRequest(method, path string, body io.Reader) (*http.Request,
 }
 
 func (c *Client) do(req *http.Request, v interface{}) (*http.Response, error) {
+	b, err := req.GetBody()
+	buf := new(bytes.Buffer)
+	buf.ReadFrom(b)
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
 		return nil, err
