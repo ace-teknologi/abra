@@ -2,10 +2,10 @@
 
 ## v0.1.0
 
-* Supports the HTTP POST SearchByASICv201408 method including test cases
 * Added support for ACN validation with tests
-* Mocking of HTTP requests in tests
+* Supports the HTTP POST SearchByASICv201408 method including test cases
 * Added tests for [./abr/abr.go](./abr/abr.go)
+* Mocking of HTTP requests in tests
 
 ## v0.0.1
 
