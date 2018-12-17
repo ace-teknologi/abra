@@ -4,6 +4,7 @@
 
 * Supports the HTTP POST SearchByASICv201408 method including test cases
 * Added support for ACN validation with tests
+* Mocking of HTTP requests in tests
 
 ## v0.0.1
 

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ABRPayloadSearchResults xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://abr.business.gov.au/ABRXMLSearch/">
+  <request>
+    <identifierSearchRequest>
+      <authenticationGUID>TEST_ABR_GUID</authenticationGUID>
+      <identifierType>ASIC</identifierType>
+      <identifierValue>159033075</identifierValue>
+      <history>Y</history>
+    </identifierSearchRequest>
+  </request>
+  <response>
+    <usageStatement>The Registrar of the ABR monitors the quality of the information available on this website and updates the information regularly. However, neither the Registrar of the ABR nor the Commonwealth guarantee that the information available through this service (including search results) is accurate, up to date, complete or accept any liability arising from the use of or reliance upon this site.</usageStatement>
+    <dateRegisterLastUpdated>2018-12-15</dateRegisterLastUpdated>
+    <dateTimeRetrieved>2018-12-15T23:04:45.5830049+11:00</dateTimeRetrieved>
+    <businessEntity201408>
+      <recordLastUpdatedDate>2018-10-24</recordLastUpdatedDate>
+      <ABN>
+        <identifierValue>78159033075</identifierValue>
+        <isCurrentIndicator>Y</isCurrentIndicator>
+        <replacedFrom>0001-01-01</replacedFrom>
+      </ABN>
+      <entityStatus>
+        <entityStatusCode>Active</entityStatusCode>
+        <effectiveFrom>2012-10-01</effectiveFrom>
+        <effectiveTo>0001-01-01</effectiveTo>
+      </entityStatus>
+      <ASICNumber>159033075</ASICNumber>
+      <entityType>
+        <entityTypeCode>PRV</entityTypeCode>
+        <entityDescription>Australian Private Company</entityDescription>
+      </entityType>
+      <goodsAndServicesTax>
+        <effectiveFrom>2012-10-01</effectiveFrom>
+        <effectiveTo>0001-01-01</effectiveTo>
+      </goodsAndServicesTax>
+      <mainName>
+        <organisationName>ENERGYLINK GLOBAL PTY LTD</organisationName>
+        <effectiveFrom>2018-10-24</effectiveFrom>
+      </mainName>
+      <mainName>
+        <organisationName>COZERO ENERGYLINK PTY LTD</organisationName>
+        <effectiveFrom>2013-05-08</effectiveFrom>
+        <effectiveTo>2018-10-24</effectiveTo>
+      </mainName>
+      <mainName>
+        <organisationName>COZERO LIGHTING PTY LTD</organisationName>
+        <effectiveFrom>2012-10-01</effectiveFrom>
+        <effectiveTo>2013-05-08</effectiveTo>
+      </mainName>
+      <mainBusinessPhysicalAddress>
+        <stateCode>NSW</stateCode>
+        <postcode>2000</postcode>
+        <effectiveFrom>2018-06-29</effectiveFrom>
+        <effectiveTo>0001-01-01</effectiveTo>
+      </mainBusinessPhysicalAddress>
+      <mainBusinessPhysicalAddress>
+        <stateCode>NSW</stateCode>
+        <postcode>2000</postcode>
+        <effectiveFrom>2014-09-18</effectiveFrom>
+        <effectiveTo>2018-06-29</effectiveTo>
+      </mainBusinessPhysicalAddress>
+      <mainBusinessPhysicalAddress>
+        <stateCode>NSW</stateCode>
+        <postcode>2000</postcode>
+        <effectiveFrom>2012-10-01</effectiveFrom>
+        <effectiveTo>2014-09-18</effectiveTo>
+      </mainBusinessPhysicalAddress>
+    </businessEntity201408>
+  </response>
+</ABRPayloadSearchResults>

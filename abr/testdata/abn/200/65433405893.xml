@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ABRPayloadSearchResults xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://abr.business.gov.au/ABRXMLSearch/">
+  <request>
+    <identifierSearchRequest>
+      <authenticationGUID>TEST_ABR_GUID</authenticationGUID>
+      <identifierType>ABN</identifierType>
+      <identifierValue>65433405893</identifierValue>
+      <history>Y</history>
+    </identifierSearchRequest>
+  </request>
+  <response>
+    <usageStatement>The Registrar of the ABR monitors the quality of the information available on this website and updates the information regularly. However, neither the Registrar of the ABR nor the Commonwealth guarantee that the information available through this service (including search results) is accurate, up to date, complete or accept any liability arising from the use of or reliance upon this site.</usageStatement>
+    <dateRegisterLastUpdated>2018-12-14</dateRegisterLastUpdated>
+    <dateTimeRetrieved>2018-12-14T22:57:55.0522054+11:00</dateTimeRetrieved>
+    <businessEntity201408>
+      <recordLastUpdatedDate>2007-05-02</recordLastUpdatedDate>
+      <ABN>
+        <identifierValue>65433405893</identifierValue>
+        <isCurrentIndicator>Y</isCurrentIndicator>
+        <replacedFrom>0001-01-01</replacedFrom>
+      </ABN>
+      <entityStatus>
+        <entityStatusCode>Cancelled</entityStatusCode>
+        <effectiveFrom>2007-05-02</effectiveFrom>
+        <effectiveTo>0001-01-01</effectiveTo>
+      </entityStatus>
+      <entityStatus>
+        <entityStatusCode>Active</entityStatusCode>
+        <effectiveFrom>2002-07-01</effectiveFrom>
+        <effectiveTo>2007-05-02</effectiveTo>
+      </entityStatus>
+      <ASICNumber />
+      <entityType>
+        <entityTypeCode>IND</entityTypeCode>
+        <entityDescription>Individual/Sole Trader</entityDescription>
+      </entityType>
+      <legalName>
+        <givenName>STUART</givenName>
+        <otherGivenName>JASON</otherGivenName>
+        <familyName>AULD</familyName>
+        <effectiveFrom>2002-07-01</effectiveFrom>
+        <effectiveTo>0001-01-01</effectiveTo>
+      </legalName>
+      <mainTradingName>
+        <organisationName>STUART J AULD</organisationName>
+        <effectiveFrom>2002-07-01</effectiveFrom>
+      </mainTradingName>
+      <mainBusinessPhysicalAddress>
+        <stateCode>NSW</stateCode>
+        <postcode>2097</postcode>
+        <effectiveFrom>2002-09-16</effectiveFrom>
+        <effectiveTo>0001-01-01</effectiveTo>
+      </mainBusinessPhysicalAddress>
+      <mainBusinessPhysicalAddress>
+        <stateCode>NSW</stateCode>
+        <postcode>2097</postcode>
+        <effectiveFrom>2002-07-01</effectiveFrom>
+        <effectiveTo>2002-09-16</effectiveTo>
+      </mainBusinessPhysicalAddress>
+    </businessEntity201408>
+  </response>
+</ABRPayloadSearchResults>
