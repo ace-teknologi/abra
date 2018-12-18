@@ -1,14 +1,14 @@
 # Go command
-GOCMD=go
-GOBUILD=$(GOCMD) build
-GOCLEAN=$(GOCMD) clean
-GOTEST=$(GOCMD) test
+GOFMT_FILES?=$$(find . -name '*.go' | grep -v vendor)
 BINARY_DIR=bin
 
 clean:
-	$(GOCLEAN)
+	go clean
+
+fmt:
+	gofmt -w $(GOFMT_FILES)
 
 test: clean
-	$(GOTEST) -v ./...
+	go test -v ./...
 
 .PHONY: clean
