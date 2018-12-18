@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/sjauld/go-abn/cmd"
+	"github.com/ace-teknologi/go-abn/cmd"
 )
 
 func main() {
