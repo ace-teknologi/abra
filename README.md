@@ -1,6 +1,6 @@
 # Go ABN
 
-[![Build Status](https://travis-ci.org/sjauld/go-abn.svg?branch=master)](https://travis-ci.org/sjauld/go-abn)
+[![Build Status](https://travis-ci.org/ace-teknologi/go-abn.svg?branch=master)](https://travis-ci.org/sjauld/go-abn)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fsjauld%2Fgo-abn.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fsjauld%2Fgo-abn?ref=badge_shield)
 [![GoDoc Status](https://godoc.org/github.com/sjauld/go-abn?status.svg)](http://godoc.org/github.com/sjauld/go-abn)
 
