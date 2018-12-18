@@ -3,31 +3,31 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/ace-teknologi/go-abn/abr"
+	"../abr"
 	"github.com/spf13/cobra"
 )
 
 const (
-	searchStringFlag = "find-acn"
+	findACNStringFlag = "find-acn"
 )
 
-var searchString string
+var findACNString string
 
-var searchCmd = &cobra.Command{
+var findACNCmd = &cobra.Command{
 	Use:   "find-acn",
 	Short: "Finds an ACN in the ABR",
 	Long:  `Finds an ACN in the ABR`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return search()
+		return findACN()
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(searchCmd)
-	searchCmd.Flags().StringVarP(&searchString, searchStringFlag, "s", "", "A nine digit ACN for you to search")
+	rootCmd.AddCommand(findACNCmd)
+	findACNCmd.Flags().StringVarP(&findACNString, findACNStringFlag, "s", "", "A nine digit ACN for you to search")
 }
 
-func search() error {
+func findACN() error {
 	// Ensure we have a GUID
 	err := setGUID()
 	if err != nil {
@@ -39,7 +39,7 @@ func search() error {
 		return err
 	}
 
-	entity, err := client.SearchByACN(searchString, false)
+	entity, err := client.SearchByACN(findACNString, false)
 	if err != nil {
 		return err
 	}

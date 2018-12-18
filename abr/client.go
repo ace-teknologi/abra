@@ -99,14 +99,19 @@ type NameSearchParams struct {
 
 // SearchResultsRecord
 type SearchResultsRecord struct {
-	ABN                         ABN                         `xml:"ABN,omitempty"`
-	MainName                    MainName                    `xml:"mainName,omitempty"`
-	MainBusinessPhysicalAddress MainBusinessPhysicalAddress `xml:"mainBusinessPhysicalAddress,omitempty"`
+	ABN                         ABN                          `xml:"ABN,omitempty"`
+	BusinessName                *SearchResultName            `xml:"businessName,omitempty"`
+	LegalName                   *SearchResultName            `xml:"legalName,omitempty"`
+	MainName                    *SearchResultName            `xml:"mainName,omitempty"`
+	MainTradingName             *SearchResultName            `xml:"mainTradingName,omitempty"`
+	OtherTradingName            *SearchResultName            `xml:"otherTradingName,omitempty"`
+	MainBusinessPhysicalAddress *MainBusinessPhysicalAddress `xml:"mainBusinessPhysicalAddress,omitempty"`
 }
 
 // MainName
-type MainName struct {
+type SearchResultName struct {
 	OrganisationName   string `xml:"organisationName,omitempty"`
+	FullName           string `xml:"fullName:omitempty"`
 	Score              int32  `xml:"score,omitempty"`
 	IsCurrentIndicator string `xml:"isCurrentIndicator,omitempty"`
 }
@@ -116,6 +121,64 @@ type MainBusinessPhysicalAddress struct {
 	StateCode          string `xml:"stateCode,omitempty"`
 	Postcode           string `xml:"postcode,omitempty"`
 	IsCurrentIndicator string `xml:"isCurrentIndicator,omitempty"`
+}
+
+// FriendlyName provides a FriendlyName for a `SearchResultName`
+func (r *SearchResultsRecord) FriendlyName() string {
+	if r.MainName != nil {
+		return r.MainName.OrganisationName
+	}
+	if r.MainTradingName != nil {
+		return r.MainTradingName.OrganisationName
+	}
+	if r.BusinessName != nil {
+		return r.BusinessName.OrganisationName
+	}
+	if r.OtherTradingName != nil {
+		return r.OtherTradingName.OrganisationName
+	}
+	if r.LegalName != nil {
+		return r.LegalName.FullName
+	}
+	return ""
+}
+
+func (r *SearchResultsRecord) Score() int32 {
+	if r.MainName != nil {
+		return r.MainName.Score
+	}
+	if r.MainTradingName != nil {
+		return r.MainTradingName.Score
+	}
+	if r.BusinessName != nil {
+		return r.BusinessName.Score
+	}
+	if r.OtherTradingName != nil {
+		return r.OtherTradingName.Score
+	}
+	if r.LegalName != nil {
+		return r.LegalName.Score
+	}
+	return 0
+}
+
+func (r *SearchResultsRecord) IsCurrentIndicator() string {
+	if r.MainName != nil {
+		return r.MainName.IsCurrentIndicator
+	}
+	if r.MainTradingName != nil {
+		return r.MainTradingName.IsCurrentIndicator
+	}
+	if r.BusinessName != nil {
+		return r.BusinessName.IsCurrentIndicator
+	}
+	if r.OtherTradingName != nil {
+		return r.OtherTradingName.IsCurrentIndicator
+	}
+	if r.LegalName != nil {
+		return r.LegalName.IsCurrentIndicator
+	}
+	return ""
 }
 
 // NewClient returns a pointer to an initialized instance of a Client

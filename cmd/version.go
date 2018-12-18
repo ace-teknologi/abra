@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/ace-teknologi/go-abn/abr"
+	"../abr"
 	"github.com/spf13/cobra"
 )
 

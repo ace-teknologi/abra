@@ -3,31 +3,31 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/ace-teknologi/go-abn/abr"
+	"../abr"
 	"github.com/spf13/cobra"
 )
 
 const (
-	searchStringFlag = "find-abn"
+	findABNStringFlag = "find-abn"
 )
 
-var searchString string
+var findABNString string
 
-var searchCmd = &cobra.Command{
+var findABNCmd = &cobra.Command{
 	Use:   "find-abn",
 	Short: "Finds an ABN in the ABR",
 	Long:  `Finds an ABN in the ABR`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return search()
+		return findABN()
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(searchCmd)
-	searchCmd.Flags().StringVarP(&searchString, searchStringFlag, "s", "", "A nine digit ABN for you to search")
+	rootCmd.AddCommand(findABNCmd)
+	findABNCmd.Flags().StringVarP(&findABNString, findABNStringFlag, "s", "", "A nine digit ABN for you to search")
 }
 
-func search() error {
+func findABN() error {
 	// Ensure we have a GUID
 	err := setGUID()
 	if err != nil {
@@ -39,7 +39,7 @@ func search() error {
 		return err
 	}
 
-	entity, err := client.SearchByABN(searchString, false)
+	entity, err := client.SearchByABN(findABNString, false)
 	if err != nil {
 		return err
 	}

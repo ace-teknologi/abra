@@ -3,31 +3,31 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/ace-teknologi/go-abn/abr"
+	"../abr"
 	"github.com/spf13/cobra"
 )
 
 const (
-	searchStringFlag = "search"
+	searchByNameStringFlag = "search"
 )
 
-var searchString string
+var searchByNameString string
 
-var searchCmd = &cobra.Command{
+var searchByNameCmd = &cobra.Command{
 	Use:   "search",
 	Short: "Searches the ABR",
 	Long:  `Searches the ABR`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return search()
+		return searchByName()
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(searchCmd)
-	searchCmd.Flags().StringVarP(&searchString, searchStringFlag, "s", "", "A nine digit ABN for you to search")
+	rootCmd.AddCommand(searchByNameCmd)
+	searchByNameCmd.Flags().StringVarP(&searchByNameString, searchByNameStringFlag, "s", "", "The name of the company to search for")
 }
 
-func search() error {
+func searchByName() error {
 	// Ensure we have a GUID
 	err := setGUID()
 	if err != nil {
@@ -39,17 +39,16 @@ func search() error {
 		return err
 	}
 
-	searchResults, err := client.SearchByName(searchString, false)
+	searchResults, err := client.SearchByName(searchByNameString, nil)
 	if err != nil {
 		return err
 	}
 
 	fmt.Printf("Found %d Business Entities:\n", searchResults.NumberOfRecords)
 	for i, r := range searchResults.SearchResultsRecord {
-		fmt.Printf("\n%d.\n", i)
-		fmt.Printf("  %s %s\n", r.ABN, r.MainName.OrganisationName)
-		fmt.Printf("  %s %s\n", r.MainBusinessPhysicalAddress.Postcode, r.MainBusinessPhysicalAddress.StateCode)
-		fmt.Printf("  %d/100 %s\n\n", r.MainName.Score, r.MainName.IsCurrentIndicator)
+		fmt.Printf("\n%d.\t%s %s\n", (i + 1), r.ABN.IdentifierValue, r.FriendlyName())
+		fmt.Printf("\t%s %s\n", r.MainBusinessPhysicalAddress.Postcode, r.MainBusinessPhysicalAddress.StateCode)
+		fmt.Printf("\t%d/100 %s\n", r.Score(), r.IsCurrentIndicator())
 	}
 
 	return nil
