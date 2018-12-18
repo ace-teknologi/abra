@@ -49,7 +49,6 @@ func (a *ABN) IsValid() (bool, error) {
 }
 
 // ValidateABN tests a string to see if it is a valid ABN
-func ValidateABN(abn string) (bool, error) {
-	abnobj := ABN{IdentifierValue: abn}
-	return abnobj.IsValid()
+func ValidateABN(abn string) (bool, string) {
+	return (&ABN{IdentifierValue: abn}).IsValid()
 }

@@ -50,6 +50,5 @@ func (a *ACN) IsValid() (bool, string) {
 
 // ValidateACN tests a string to see if it is a valid ACN
 func ValidateACN(acn string) (bool, string) {
-	acnobj := ACN{IdentifierValue: acn}
-	return acnobj.IsValid()
+	return (&ACN{IdentifierValue: acn}).IsValid()
 }
