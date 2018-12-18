@@ -20,7 +20,7 @@ type ABN struct {
 // (https://www.abr.business.gov.au/HelpAbnFormat.aspx)
 func (a *ABN) IsValid() (bool, error) {
 	// Strip whitespace
-	raw := strings.Replace(a.IdentifierValue, " ", "", -1)
+	raw := strings.Replace(abn, " ", "", -1)
 	if len(raw) != 11 {
 		return false, fmt.Errorf("Invalid ABN: found a %d character string", len(raw))
 	}
