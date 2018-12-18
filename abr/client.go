@@ -23,6 +23,26 @@ const (
 	userAgent        = "go-abn v0.0.0"
 )
 
+var defaultNameSearchParams = NameSearchParams{
+	ActiveABNsOnly:   true,
+	BusinessName:     true,
+	LegalName:        true,
+	MaxSearchResults: 50,
+	MinimumScore:     0,
+	Postcode:         "",
+	States:           make([]State, 0),
+	TradingName:      true,
+	TypicalSearch:    true,
+}
+
+// Client provides a client connection to the ABR
+type Client struct {
+	BaseURL *url.URL
+	GUID    string
+
+	httpClient *http.Client
+}
+
 // Payload encapsulates a Response from the API
 type Payload struct {
 	Response *Response `xml:"response,omitempty"`
@@ -44,29 +64,58 @@ type Response struct {
 	SearchResultsList    *ResponseSearchResultsList `xml:"searchResultsList,omitempty"`
 }
 
-type ResponseException struct {
-	ExceptionDescription string `xml:"exceptionDescription,omitempty"`
-	ExceptionCode        string `xml:"exceptionCode,omitempty"`
-}
-
+// ResponseABNList
 type ResponseABNList struct {
 	NumberOfRecords int32    `xml:"numberOfRecords,omitempty"`
 	Abn             []string `xml:"abn,omitempty"`
 }
 
+// ResponseException returns the exception
+type ResponseException struct {
+	ExceptionDescription string `xml:"exceptionDescription,omitempty"`
+	ExceptionCode        string `xml:"exceptionCode,omitempty"`
+}
+
+// ResponseSearchResultsList
 type ResponseSearchResultsList struct {
 	NumberOfRecords int32  `xml:"numberOfRecords,omitempty"`
 	ExceedsMaximum  string `xml:"exceedsMaximum,omitempty"`
-	// @todo implement search results
-	// SearchResultsRecord []*SearchResultsRecord `xml:"searchResultsRecord,omitempty"`
+
+	SearchResultsRecord []*SearchResultsRecord `xml:"searchResultsRecord,omitempty"`
 }
 
-// Client provides a client connection to the ABR
-type Client struct {
-	BaseURL *url.URL
-	GUID    string
+// NameSearchParams
+type NameSearchParams struct {
+	ActiveABNsOnly   bool
+	BusinessName     bool
+	LegalName        bool
+	MaxSearchResults int32
+	MinimumScore     int32
+	Postcode         string
+	States           []State
+	TradingName      bool
+	TypicalSearch    bool
+}
 
-	httpClient *http.Client
+// SearchResultsRecord
+type SearchResultsRecord struct {
+	ABN                         ABN                         `xml:"ABN,omitempty"`
+	MainName                    MainName                    `xml:"mainName,omitempty"`
+	MainBusinessPhysicalAddress MainBusinessPhysicalAddress `xml:"mainBusinessPhysicalAddress,omitempty"`
+}
+
+// MainName
+type MainName struct {
+	OrganisationName   string `xml:"organisationName,omitempty"`
+	Score              int32  `xml:"score,omitempty"`
+	IsCurrentIndicator string `xml:"isCurrentIndicator,omitempty"`
+}
+
+// MainBusinessPhysicalAddress
+type MainBusinessPhysicalAddress struct {
+	StateCode          string `xml:"stateCode,omitempty"`
+	PostCode           string `xml:"postcode,omitempty"`
+	IsCurrentIndicator string `xml:"isCurrentIndicator,omitempty"`
 }
 
 // NewClient returns a pointer to an initialized instance of a Client
@@ -80,7 +129,7 @@ func NewClient() (*Client, error) {
 }
 
 // NewClientWithGuid returns a pointer to an initalized instance of a Client,
-// configured with a GUID
+// configured with a `guid`
 func NewWithGuid(guid string) (*Client, error) {
 	rawurl, ok := os.LookupEnv("ABR_ENDPOINT")
 	if !ok {
@@ -108,7 +157,7 @@ func (c *Client) SearchByABN(abn string, hist bool) (*BusinessEntity, error) {
 // SearchByABNv201408 wraps the API call to query an ABN
 func (c *Client) SearchByABNv201408(abn string, hist bool) (*BusinessEntity, error) {
 	if ok, err := ValidateABN(abn); !ok {
-		return nil, fmt.Errorf(err)
+		return nil, err
 	}
 
 	data := url.Values{}
@@ -185,6 +234,113 @@ func (c *Client) SearchByASICv201408(acn string, hist bool) (*BusinessEntity, er
 	}
 
 	return resp.Response.BusinessEntity201408, nil
+}
+
+// SearchByName wraps the API call to query by `name` and other optional details
+func (c *Client) SearchByName(name string, params *NameSearchParams) (*ResponseSearchResultsList, error) {
+	return c.SearchByNameAdvancedSimpleProtocol2017(name, params)
+}
+
+func (c *Client) SearchByNameAdvancedSimpleProtocol2017(name string, params *NameSearchParams) (*ResponseSearchResultsList, error) {
+	// Strip whitespace
+	name = strings.Trim(name, " ")
+
+	if len(name) == 0 {
+		return nil, fmt.Errorf("No `name` to search with provided")
+	}
+
+	if params == nil {
+		params = &defaultNameSearchParams
+	}
+
+	data := url.Values{}
+	// Authentication GUID
+	data.Set("authenticationGuid", c.GUID)
+	// Search value
+	data.Add("name", name)
+	// Optional Parameters
+	// Postcode isolation
+	if params.Postcode != "" {
+		data.Add("postcode", params.Postcode)
+	} else {
+		data.Add("postcode", "")
+	}
+	// LegalName
+	if params.LegalName {
+		data.Add("legalName", "Y")
+	} else {
+		data.Add("legalName", "N")
+	}
+	// TradingName
+	if params.TradingName {
+		data.Add("tradingName", "Y")
+	} else {
+		data.Add("tradingName", "N")
+	}
+	// BusinessName
+	if params.BusinessName {
+		data.Add("businessName", "Y")
+	} else {
+		data.Add("businessName", "N")
+	}
+	// ActiveABNsOnly
+	if params.ActiveABNsOnly {
+		data.Add("activeABNsOnly", "Y")
+	} else {
+		data.Add("activeABNsOnly", "N")
+	}
+	// State isolated searches
+	if len(params.States) > 0 {
+		for _, state := range States {
+			data.Add(state.ShortTitle, "N")
+		}
+
+		for _, state := range params.States {
+			data.Add(state.ShortTitle, "Y")
+		}
+	} else {
+		for _, state := range States {
+			data.Add(state.ShortTitle, "Y")
+		}
+	}
+	// Quality filtering
+	if params.TypicalSearch {
+		data.Add("searchWidth", "typical")
+	} else {
+		data.Add("searchWidth", "narrow")
+	}
+	// MinimumScore
+	if params.MinimumScore > 0 {
+		data.Add("minimumScore", fmt.Sprintf("%d", params.MinimumScore))
+	} else {
+		data.Add("minimumScore", "0")
+	}
+	// MinimumScore
+	if params.MaxSearchResults > 0 {
+		data.Add("maxSearchResults", fmt.Sprintf("%d", params.MaxSearchResults))
+	} else {
+		data.Add("maxSearchResults", "100")
+	}
+
+	req, err := c.newRequest("POST", "ABRSearchByNameAdvancedSimpleProtocol2017", strings.NewReader(data.Encode()))
+	if err != nil {
+		return nil, err
+	}
+
+	resp := Payload{}
+
+	_, err = c.do(req, &resp)
+	if err != nil {
+		return nil, err
+	}
+
+	// ABR returns a 200 response for some exceptions. Check for these.
+	if resp.Response.Exception != nil {
+		log.Printf("[ERROR] %v\n", resp.Response.Exception.ExceptionDescription)
+		return nil, fmt.Errorf(resp.Response.Exception.ExceptionDescription)
+	}
+
+	return resp.Response.SearchResultsList, nil
 }
 
 func (c *Client) newRequest(method, path string, body io.Reader) (*http.Request, error) {

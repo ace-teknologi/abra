@@ -10,6 +10,7 @@ import (
 // ABN represents an actual Australian Business Number
 type ABN struct {
 	IdentifierValue         string  `xml:"identifierValue,omitempty"`
+	IdentifierStatus        string  `xml:"identifierStatus,omitempty"`
 	IsCurrentIndicator      string  `xml:"isCurrentIndicator,omitempty"`
 	ReplacedIdentifierValue string  `xml:"replacedIdentifierValue,omitempty"`
 	ReplacedFrom            abnDate `xml:"replacedFrom,omitempty"`
@@ -17,11 +18,11 @@ type ABN struct {
 
 // IsValid checks whether your ABN has a valid identifier
 // (https://www.abr.business.gov.au/HelpAbnFormat.aspx)
-func (a *ABN) IsValid() (bool, string) {
+func (a *ABN) IsValid() (bool, error) {
 	// Strip whitespace
 	raw := strings.Replace(a.IdentifierValue, " ", "", -1)
 	if len(raw) != 11 {
-		return false, fmt.Sprintf("Invalid ABN: found a %d character string", len(raw))
+		return false, fmt.Errorf("Invalid ABN: found a %d character string", len(raw))
 	}
 
 	var checksum int
@@ -29,7 +30,7 @@ func (a *ABN) IsValid() (bool, string) {
 	for i, char := range raw {
 		digit, err := strconv.Atoi(string(char))
 		if err != nil {
-			return false, fmt.Sprintf("Invalid ABN: found character %s", string(char))
+			return false, fmt.Errorf("Invalid ABN: found character %s", string(char))
 		}
 		if i == 0 {
 			// For the first digit, subtract 1 then multiply by ten
@@ -41,14 +42,14 @@ func (a *ABN) IsValid() (bool, string) {
 	}
 
 	if math.Mod(float64(checksum), float64(89)) > 0 {
-		return false, fmt.Sprintf("Invalid checksum: %d", checksum)
+		return false, fmt.Errorf("Invalid checksum: %d", checksum)
 	}
 
-	return true, ""
+	return true, nil
 }
 
 // ValidateABN tests a string to see if it is a valid ABN
-func ValidateABN(abn string) (bool, string) {
+func ValidateABN(abn string) (bool, error) {
 	abnobj := ABN{IdentifierValue: abn}
 	return abnobj.IsValid()
 }
