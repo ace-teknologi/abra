@@ -1,0 +1,9 @@
+github.com/h2non/gock v1.0.12 h1:e1lLoiLdVdzJoqqCRtm1tbqCEDWG9Xei/1mzmav+GAs=
+github.com/h2non/gock v1.0.12/go.mod h1:CZMcB0Lg5IWnr9bF79pPMg9WeV6WumxQiUJ1UvdO1iE=
+github.com/inconshreveable/mousetrap v1.0.0/go.mod h1:PxqpIevigyE2G7u3NXJIT2ANytuPF1OarO4DADm73n8=
+github.com/sjauld/go-abn v0.0.0-20181217230854-0a9fc227aa25 h1:nHRz4RRukSCttNQpE+NN7zpXVftw3PVYveu2367eU/A=
+github.com/sjauld/go-abn v0.0.0-20181217230854-0a9fc227aa25/go.mod h1:Ehgc4chSPR76rK4vL97xmf4KMPDmrP2EA/LaMD2rDHk=
+github.com/spf13/cobra v0.0.2 h1:NfkwRbgViGoyjBKsLI0QMDcuMnhM+SBg3T0cGfpvKDE=
+github.com/spf13/cobra v0.0.2/go.mod h1:1l0Ry5zgKvJasoi3XT1TypsSe7PqH0Sj9dhYf7v3XqQ=
+github.com/spf13/pflag v1.0.0 h1:oaPbdDe/x0UncahuwiPxW1GYJyilRAdsPnq3e1yaPcI=
+github.com/spf13/pflag v1.0.0/go.mod h1:DYY7MBk1bdzusC3SYhjObp+wFpr4gzcvqqNjLnInEg4=

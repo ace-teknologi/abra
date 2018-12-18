@@ -6,6 +6,10 @@
 A Go wrapper for the
 [Australian Business Register](https://abr.business.gov.au/abrxmlsearch/abrxmlsearch.asmx)
 
+## Requirements
+
+* Go 1.11.x
+
 ## Usage
 
 1. [Register](https://www.abr.business.gov.au/RegisterAgreement.aspx) for a GUID
