@@ -9,8 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Command Line Interface support for search by name as `search`
 * Supports the HTTP POST ABRSearchByNameAdvancedSimpleProtocol2017 method
   including test cases
+
+### Changed
+
+* Command Line Interface refactor to provide `find-abn` and `find-acn` services.
 
 ## v0.1.0
 

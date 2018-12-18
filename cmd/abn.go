@@ -8,15 +8,15 @@ import (
 )
 
 const (
-	searchStringFlag = "search"
+	searchStringFlag = "find-abn"
 )
 
 var searchString string
 
 var searchCmd = &cobra.Command{
-	Use:   "search",
-	Short: "Searches the ABR",
-	Long:  `Searches the ABR`,
+	Use:   "find-abn",
+	Short: "Finds an ABN in the ABR",
+	Long:  `Finds an ABN in the ABR`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return search()
 	},
@@ -39,18 +39,12 @@ func search() error {
 		return err
 	}
 
-	searchResults, err := client.SearchByName(searchString, false)
+	entity, err := client.SearchByABN(searchString, false)
 	if err != nil {
 		return err
 	}
 
-	fmt.Printf("Found %d Business Entities:\n", searchResults.NumberOfRecords)
-	for i, r := range searchResults.SearchResultsRecord {
-		fmt.Printf("\n%d.\n", i)
-		fmt.Printf("  %s %s\n", r.ABN, r.MainName.OrganisationName)
-		fmt.Printf("  %s %s\n", r.MainBusinessPhysicalAddress.Postcode, r.MainBusinessPhysicalAddress.StateCode)
-		fmt.Printf("  %d/100 %s\n\n", r.MainName.Score, r.MainName.IsCurrentIndicator)
-	}
+	fmt.Printf("Found Business Entity: %v\n", entity.Name())
 
 	return nil
 }

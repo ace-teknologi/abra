@@ -114,7 +114,7 @@ type MainName struct {
 // MainBusinessPhysicalAddress
 type MainBusinessPhysicalAddress struct {
 	StateCode          string `xml:"stateCode,omitempty"`
-	PostCode           string `xml:"postcode,omitempty"`
+	Postcode           string `xml:"postcode,omitempty"`
 	IsCurrentIndicator string `xml:"isCurrentIndicator,omitempty"`
 }
 
