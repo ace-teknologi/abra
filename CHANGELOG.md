@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+* Chained calls within `ValidateACN` and `ValidateABN`.
 * Command Line Interface refactor to provide `find-abn` and `find-acn` services.
 
 ## v0.1.0

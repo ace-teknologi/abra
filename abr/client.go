@@ -266,7 +266,7 @@ func (c *Client) SearchByASIC(abn string, hist bool) (*BusinessEntity, error) {
 // SearchByASICv201408 wraps the API call to query an ACN
 func (c *Client) SearchByASICv201408(acn string, hist bool) (*BusinessEntity, error) {
 	if ok, err := ValidateACN(acn); !ok {
-		return nil, fmt.Errorf(err)
+		return nil, err
 	}
 
 	data := url.Values{}

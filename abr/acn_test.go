@@ -112,7 +112,7 @@ func TestValidateACNWithValidACNs(t *testing.T) {
 	for _, acn := range validACNs {
 		valid, err := ValidateACN(acn.acn)
 
-		if err != "" {
+		if err != nil {
 			t.Error(err)
 			continue
 		}
@@ -127,7 +127,7 @@ func TestValidateACNWithInvalidACNs(t *testing.T) {
 	for _, acn := range invalidACNs {
 		valid, err := ValidateACN(acn.acn)
 
-		if err == "" {
+		if err == nil {
 			t.Error("Expected error")
 			continue
 		}
