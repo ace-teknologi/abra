@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ace-teknologi/go-abn/abr"
+	"github.com/ace-technologi/go-abn/abr"
 	"github.com/spf13/cobra"
 )
 

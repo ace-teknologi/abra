@@ -128,3 +128,7 @@ func (b *BusinessEntity) ABN() string {
 	}
 	return ""
 }
+
+func (abn ABN) String() string {
+	return fmt.Sprintf("%s %s %s %s", abn.IdentifierValue, abn.IdentifierStatus, abn.IsCurrentIndicator, abn.ReplacedIdentifierValue, abn.ReplacedFrom)
+}
