@@ -4,16 +4,25 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strings"
 
-	"github.com/ace-technologi/go-abn/abr"
+	"github.com/ace-teknologi/go-abn/abr"
 	"github.com/spf13/cobra"
 )
 
 const (
-	guidFlagName = "GUID"
+	guidFlagName                     = "GUID"
+	outputFormatFlag                 = "output-format"
+	outputFormatTextTemplatePathFlag = "text-output-template"
+	outputTypeJSON                   = "json"
+	outputTypeTEXT                   = "text"
+	outputTypeXML                    = "xml"
+	outputTypeInvalidMessage         = "Invalid output type '%s'. Please choose from: '%s', '%s', or '%s'."
 )
 
 var GUID string
+var outputFormat string
+var outputFormatTextTemplatePath string
 
 var rootCmd = &cobra.Command{
 	Use:   "goabn",
@@ -49,4 +58,15 @@ func setGUID() error {
 		}
 	}
 	return nil
+}
+
+func setOutputType(f string) (string, error) {
+	if f == "" {
+		f = outputTypeTEXT
+	} else {
+		if strings.Compare(f, outputTypeJSON) != 0 && strings.Compare(f, outputTypeTEXT) != 0 && strings.Compare(f, outputTypeXML) != 0 {
+			return "", fmt.Errorf(outputTypeInvalidMessage, f, outputTypeJSON, outputTypeTEXT, outputTypeXML)
+		}
+	}
+	return f, nil
 }

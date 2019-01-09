@@ -111,7 +111,7 @@ type SearchResultsRecord struct {
 // MainName
 type SearchResultName struct {
 	OrganisationName   string `xml:"organisationName,omitempty"`
-	FullName           string `xml:"fullName:omitempty"`
+	FullName           string `xml:"fullName,omitempty"`
 	Score              int32  `xml:"score,omitempty"`
 	IsCurrentIndicator string `xml:"isCurrentIndicator,omitempty"`
 }
@@ -124,7 +124,7 @@ type MainBusinessPhysicalAddress struct {
 }
 
 // FriendlyName provides a FriendlyName for a `SearchResultName`
-func (r *SearchResultsRecord) FriendlyName() string {
+func (r *SearchResultsRecord) Name() string {
 	if r.MainName != nil {
 		return r.MainName.OrganisationName
 	}

@@ -1,9 +1,14 @@
 package cmd
 
 import (
+	"encoding/json"
+	"encoding/xml"
 	"fmt"
+	"os"
+	"path/filepath"
+	"text/template"
 
-	"github.com/ace-technologi/go-abn/abr"
+	"github.com/ace-teknologi/go-abn/abr"
 	"github.com/spf13/cobra"
 )
 
@@ -25,6 +30,8 @@ var findACNCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(findACNCmd)
 	findACNCmd.Flags().StringVarP(&findACNString, findACNStringFlag, "s", "", "A nine digit ACN for you to search")
+	findACNCmd.Flags().StringVarP(&outputFormat, outputFormatFlag, "f", "", "Output format: json, xml, text")
+	findACNCmd.Flags().StringVarP(&outputFormatTextTemplatePath, outputFormatTextTemplatePathFlag, "t", "", "Path to text output template")
 }
 
 func findACN() error {
@@ -44,41 +51,41 @@ func findACN() error {
 		return err
 	}
 
-	fmt.Printf("Found Business Entity from ACN: %s\n\n", findACNString)
-	fmt.Printf("  Name: %s\n", entity.Name())
-	if len(entity.ASICNumber) > 0 {
-		fmt.Printf("  ACN: %s\n", entity.ASICNumber)
+	outputFormat, err := setOutputType(outputFormat)
+	if err != nil {
+		return err
 	}
-	fmt.Printf("  ABNs:\n")
-	for _, abn := range entity.ABNs {
-		fmt.Printf("  - %s\n", abn.String())
+
+	if outputFormat == outputTypeTEXT {
+		fmt.Printf("Found Business Entity from ACN: %s\n\n", findACNString)
+
+		cwd, err := os.Getwd()
+		if err != nil {
+			return err
+		}
+
+		t, err := template.ParseFiles(filepath.Join(cwd, "./cmd/templates/abn.txt.gtpl"))
+		if err != nil {
+			return err
+		}
+
+		err = t.Execute(os.Stdout, entity)
+		if err != nil {
+			return err
+		}
+	} else if outputFormat == outputTypeJSON {
+		b, err := json.Marshal(entity)
+		if err != nil {
+			return err
+		}
+		fmt.Println(string(b))
+	} else if outputFormat == outputTypeXML {
+		b, err := xml.Marshal(entity)
+		if err != nil {
+			return err
+		}
+		fmt.Println(string(b))
 	}
-	fmt.Printf("  Addresses:\n")
-	for _, address := range entity.PhysicalAddresses {
-		fmt.Printf("  - %s %s\n", address.Postcode, address.StateCode)
-	}
-	fmt.Printf("  Type: %s (%s)\n", entity.EntityType.EntityTypeCode, entity.EntityType.EntityDescription)
-	fmt.Printf("  Statuses:\n")
-	for _, es := range entity.EntityStatuses {
-		fmt.Printf("  - %s (%s-%s)\n", es.EntityStatusCode, es.EffectiveFrom, es.EffectiveTo)
-	}
-	fmt.Printf("  Also known as:\n")
-	for _, name := range entity.BusinessNames {
-		fmt.Printf("  - %s\n", name.OrganisationName)
-	}
-	for _, name := range entity.HumanNames {
-		fmt.Printf("  - %s %s %s\n", name.GivenName, name.OtherGivenName, name.FamilyName)
-	}
-	for _, name := range entity.MainNames {
-		fmt.Printf("  - %s\n", name.OrganisationName)
-	}
-	for _, name := range entity.MainTradingNames {
-		fmt.Printf("  - %s\n", name.OrganisationName)
-	}
-	for _, name := range entity.OtherTradingNames {
-		fmt.Printf("  - %s\n", name.OrganisationName)
-	}
-	fmt.Printf("\n")
 
 	return nil
 }
