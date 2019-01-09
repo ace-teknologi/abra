@@ -19,8 +19,13 @@ type ABN struct {
 // IsValid checks whether your ABN has a valid identifier
 // (https://www.abr.business.gov.au/HelpAbnFormat.aspx)
 func (a *ABN) IsValid() (bool, error) {
+	return ValidateABN(a.IdentifierValue)
+}
+
+// ValidateABN tests a string to see if it is a valid ABN
+func ValidateABN(abn string) (bool, error) {
 	// Strip whitespace
-	raw := strings.Replace(a.IdentifierValue, " ", "", -1)
+	raw := strings.Replace(abn, " ", "", -1)
 	if len(raw) != 11 {
 		return false, fmt.Errorf("Invalid ABN: found a %d character string", len(raw))
 	}
@@ -46,10 +51,4 @@ func (a *ABN) IsValid() (bool, error) {
 	}
 
 	return true, nil
-}
-
-// ValidateABN tests a string to see if it is a valid ABN
-func ValidateABN(abn string) (bool, error) {
-	abnobj := ABN{IdentifierValue: abn}
-	return abnobj.IsValid()
 }
