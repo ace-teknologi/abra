@@ -67,12 +67,13 @@ func setGUID() error {
 
 func setOutputType(f string) (string, error) {
 	if f == "" {
-		f = outputTypeTEXT
-	} else {
-		if f != outputTypeJSON && f != outputTypeTEXT && f != outputTypeXML {
-			return "", ErrInvalidOutputTypeMessage
-		}
+		return outputTypeText, nil
 	}
+
+	if f != outputTypeJSON && f != outputTypeTEXT && f != outputTypeXML {
+		return "", ErrInvalidOutputTypeMessage
+	}
+
 	return f, nil
 }
 
