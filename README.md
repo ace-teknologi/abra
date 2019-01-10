@@ -25,13 +25,13 @@ goabn search -s "Bob's Country Bunker" --GUID 123-456-789
 When you have an ABN you can get further information. For example:
 
 ```bash
-go run main.go find-abn -s 33102417032 --GUID 123-456-789
+goabn find-abn -s 33102417032 --GUID 123-456-789
 ```
 
 ### Find by ACN
 
 ```bash
-go run main.go find-acn -s 102417032 --GUID 123-456-789
+goabn find-acn -s 102417032 --GUID 123-456-789
 ```
 
 ### Options
