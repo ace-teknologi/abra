@@ -1,5 +1,8 @@
+  ===
   Name: {{.Name}}
-  {{- if .ASICNumber}}ACN:  {{.ASICNumber}}{{end}}
+  {{- if .ASICNumber}}
+  ACN:  {{.ASICNumber}}
+  {{- end}}
   ABNs:
   {{- range .ABNs}}
   - {{.IdentifierValue}}{{if .IdentifierStatus}} {{.IdentifierStatus}}{{end}}{{if eq .IsCurrentIndicator "Y"}} (Current){{end}}{{if .ReplacedIdentifierValue}} {{.ReplacedIdentifierValue}}{{end}}{{if eq .ReplacedFrom.IsZero false}} {{.ReplacedFrom.Format "2006-01-02"}}{{end}}
@@ -29,4 +32,9 @@
   {{- range .OtherTradingNames}}
   - {{.OrganisationName}}
   {{- end}}
-  
+  ---
+  ABR Links:
+  {{- range .ABNs}}
+  - https://abr.business.gov.au/ABN/View?abn={{.IdentifierValue}}{{if .IdentifierStatus}} {{.IdentifierStatus}}{{end}}{{if eq .IsCurrentIndicator "Y"}} (Current){{end}}
+  {{- end}}
+  ===

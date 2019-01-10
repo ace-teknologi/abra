@@ -5,8 +5,6 @@ import (
 	"encoding/xml"
 	"fmt"
 	"os"
-	"path/filepath"
-	"text/template"
 
 	"github.com/ace-teknologi/go-abn/abr"
 	"github.com/spf13/cobra"
@@ -56,15 +54,11 @@ func searchByName() error {
 		return err
 	}
 
-	if outputFormat == outputTypeTEXT {
+	switch outputFormat {
+	case outputTypeTEXT:
 		fmt.Printf("Found %d Business Entities:\n", searchResults.NumberOfRecords)
 
-		cwd, err := os.Getwd()
-		if err != nil {
-			return err
-		}
-
-		t, err := template.ParseFiles(filepath.Join(cwd, "./cmd/templates/search.txt.gtpl"))
+		t, err := setOutputTypeTextTemplate("search", outputFormatTextTemplatePath)
 		if err != nil {
 			return err
 		}
@@ -76,18 +70,20 @@ func searchByName() error {
 				return err
 			}
 		}
-	} else if outputFormat == outputTypeJSON {
+	case outputTypeJSON:
 		b, err := json.Marshal(searchResults)
 		if err != nil {
 			return err
 		}
 		fmt.Println(string(b))
-	} else if outputFormat == outputTypeXML {
+	case outputTypeXML:
 		b, err := xml.Marshal(searchResults)
 		if err != nil {
 			return err
 		}
 		fmt.Println(string(b))
+	default:
+		return ErrInvalidOutputTypeMessage
 	}
 
 	return nil

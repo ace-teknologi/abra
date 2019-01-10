@@ -5,8 +5,6 @@ import (
 	"encoding/xml"
 	"fmt"
 	"os"
-	"path/filepath"
-	"text/template"
 
 	"github.com/ace-teknologi/go-abn/abr"
 	"github.com/spf13/cobra"
@@ -56,15 +54,11 @@ func findABN() error {
 		return err
 	}
 
-	if outputFormat == outputTypeTEXT {
+	switch outputFormat {
+	case outputTypeTEXT:
 		fmt.Printf("Found Business Entity from ABN: %s\n\n", findABNString)
 
-		cwd, err := os.Getwd()
-		if err != nil {
-			return err
-		}
-
-		t, err := template.ParseFiles(filepath.Join(cwd, "./cmd/templates/abn.txt.gtpl"))
+		t, err := setOutputTypeTextTemplate("find", outputFormatTextTemplatePath)
 		if err != nil {
 			return err
 		}
@@ -73,18 +67,20 @@ func findABN() error {
 		if err != nil {
 			return err
 		}
-	} else if outputFormat == outputTypeJSON {
+	case outputTypeJSON:
 		b, err := json.Marshal(entity)
 		if err != nil {
 			return err
 		}
 		fmt.Println(string(b))
-	} else if outputFormat == outputTypeXML {
+	case outputTypeXML:
 		b, err := xml.Marshal(entity)
 		if err != nil {
 			return err
 		}
 		fmt.Println(string(b))
+	default:
+		return ErrInvalidOutputTypeMessage
 	}
 
 	return nil
