@@ -58,7 +58,14 @@ template to customise the output as required.
 Set via the `-t` or `--text-output-template` flag. Example:
 
 ```bash
-goabn search -s "Bob's Country Bunker" -f json -t "./tmp/my-custom-template.gtpl" --GUID 123-456-789
+goabn search -s "Bob's Country Bunker" -f "text" \
+  -t "./tmp/my-custom-template.gtpl" --GUID 123-456-789
+```
+
+With sample template:
+```go
+Name: {{.Name}}
+Link: https://abr.business.gov.au/ABN/View?abn={{.ABN.IdentifierValue}}
 ```
 
 ## Testing
