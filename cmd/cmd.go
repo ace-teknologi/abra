@@ -4,16 +4,30 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path/filepath"
+	"text/template"
 
 	"github.com/ace-teknologi/go-abn/abr"
 	"github.com/spf13/cobra"
 )
 
 const (
-	guidFlagName = "GUID"
+	guidFlagName                     = "GUID"
+	outputFormatFlag                 = "output-format"
+	outputFormatTextTemplatePathFlag = "text-output-template"
+	outputTypeJSON                   = "json"
+	outputTypeTEXT                   = "text"
+	outputTypeXML                    = "xml"
+	defaultFindTemplatePath          = "./cmd/templates/abn.txt.gtpl"
+	defaultSearchTemplatePath        = "./cmd/templates/search.txt.gtpl"
 )
 
 var GUID string
+var outputFormat string
+var outputFormatTextTemplatePath string
+
+// ErrInvalidOutputTypeMessage provides an error message if output type is not valid
+var ErrInvalidOutputTypeMessage = fmt.Errorf("Invalid output type. Please choose from json, text, xml")
 
 var rootCmd = &cobra.Command{
 	Use:   "goabn",
@@ -49,4 +63,42 @@ func setGUID() error {
 		}
 	}
 	return nil
+}
+
+func setOutputType(f string) (string, error) {
+	if f == "" {
+		return outputTypeTEXT, nil
+	}
+
+	if f != outputTypeJSON && f != outputTypeTEXT && f != outputTypeXML {
+		return "", ErrInvalidOutputTypeMessage
+	}
+
+	return f, nil
+}
+
+func setOutputTypeTextTemplate(request string, path string) (*template.Template, error) {
+	if request != "search" && request != "find" {
+		return nil, fmt.Errorf("Invalid request type. Either `search` or `find` expected")
+	}
+
+	cwd, err := os.Getwd()
+	if err != nil {
+		return nil, err
+	}
+
+	t, err := template.ParseFiles(filepath.Join(cwd, path))
+	if err != nil {
+		switch request {
+		case "find":
+			t, err = template.ParseFiles(filepath.Join(cwd, defaultFindTemplatePath))
+		case "search":
+			t, err = template.ParseFiles(filepath.Join(cwd, defaultSearchTemplatePath))
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	return t, nil
 }

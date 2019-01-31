@@ -12,6 +12,62 @@ A Go wrapper for the
 1. [Register for a GUID](https://www.abr.business.gov.au/RegisterAgreement.aspx)
 2. Set the `ABR_GUID` environment variable to the GUID issued to you.
 
+### Search
+
+Search by the name fields of the ABN entries.
+
+```bash
+goabn search -s "Bob's Country Bunker" --GUID 123-456-789
+```
+
+### Find by ABN
+
+When you have an ABN you can get further information. For example:
+
+```bash
+goabn find-abn -s 33102417032 --GUID 123-456-789
+```
+
+### Find by ACN
+
+```bash
+goabn find-acn -s 102417032 --GUID 123-456-789
+```
+
+### Options
+
+#### Output Types
+
+There are three output types available:
+
+* text
+* json
+* xml
+
+Set via the `-f` or `--output-format` flag. Example:
+
+```bash
+goabn search -s "Bob's Country Bunker" -f json --GUID 123-456-789
+```
+
+#### Custom Text Output Template
+
+Use go's [text/template](https://golang.org/pkg/text/template/) formatted
+template to customise the output as required.
+
+Set via the `-t` or `--text-output-template` flag. Example:
+
+```bash
+goabn search -s "Bob's Country Bunker" -f "text" \
+  -t "./tmp/my-custom-template.gtpl" --GUID 123-456-789
+```
+
+With sample template:
+```go
+Name: {{.Name}}
+Link: https://abr.business.gov.au/ABN/View?abn={{.ABN.IdentifierValue}}
+```
+
 ## Testing
 
 1.  Run:

@@ -111,7 +111,7 @@ type SearchResultsRecord struct {
 // MainName
 type SearchResultName struct {
 	OrganisationName   string `xml:"organisationName,omitempty"`
-	FullName           string `xml:"fullName:omitempty"`
+	FullName           string `xml:"fullName,omitempty"`
 	Score              int32  `xml:"score,omitempty"`
 	IsCurrentIndicator string `xml:"isCurrentIndicator,omitempty"`
 }
@@ -123,8 +123,8 @@ type MainBusinessPhysicalAddress struct {
 	IsCurrentIndicator string `xml:"isCurrentIndicator,omitempty"`
 }
 
-// FriendlyName provides a FriendlyName for a `SearchResultName`
-func (r *SearchResultsRecord) FriendlyName() string {
+// Name provides a Name for a `SearchResultName` based on the available types
+func (r *SearchResultsRecord) Name() string {
 	if r.MainName != nil {
 		return r.MainName.OrganisationName
 	}
@@ -143,6 +143,7 @@ func (r *SearchResultsRecord) FriendlyName() string {
 	return ""
 }
 
+// Score returns the score for the Name returned in the search
 func (r *SearchResultsRecord) Score() int32 {
 	if r.MainName != nil {
 		return r.MainName.Score
@@ -162,6 +163,7 @@ func (r *SearchResultsRecord) Score() int32 {
 	return 0
 }
 
+// IsCurrentIndicator returns the IsCurrentIndicator flag for the Name returned in the search
 func (r *SearchResultsRecord) IsCurrentIndicator() string {
 	if r.MainName != nil {
 		return r.MainName.IsCurrentIndicator
@@ -304,6 +306,7 @@ func (c *Client) SearchByName(name string, params *NameSearchParams) (*ResponseS
 	return c.SearchByNameAdvancedSimpleProtocol2017(name, params)
 }
 
+// SearchByNameAdvancedSimpleProtocol2017 wraps the SearchByNameAdvancedSimpleProtocol2017
 func (c *Client) SearchByNameAdvancedSimpleProtocol2017(name string, params *NameSearchParams) (*ResponseSearchResultsList, error) {
 	// Strip whitespace
 	name = strings.Trim(name, " ")

@@ -1,7 +1,10 @@
 package cmd
 
 import (
+	"encoding/json"
+	"encoding/xml"
 	"fmt"
+	"os"
 
 	"github.com/ace-teknologi/go-abn/abr"
 	"github.com/spf13/cobra"
@@ -25,6 +28,8 @@ var searchByNameCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(searchByNameCmd)
 	searchByNameCmd.Flags().StringVarP(&searchByNameString, searchByNameStringFlag, "s", "", "The name of the company to search for")
+	searchByNameCmd.Flags().StringVarP(&outputFormat, outputFormatFlag, "f", "", "Output format: json, xml, text")
+	searchByNameCmd.Flags().StringVarP(&outputFormatTextTemplatePath, outputFormatTextTemplatePathFlag, "t", "", "Path to text output template")
 }
 
 func searchByName() error {
@@ -44,11 +49,41 @@ func searchByName() error {
 		return err
 	}
 
-	fmt.Printf("Found %d Business Entities:\n", searchResults.NumberOfRecords)
-	for i, r := range searchResults.SearchResultsRecord {
-		fmt.Printf("\n%d.\t%s %s\n", (i + 1), r.ABN.IdentifierValue, r.FriendlyName())
-		fmt.Printf("\t%s %s\n", r.MainBusinessPhysicalAddress.Postcode, r.MainBusinessPhysicalAddress.StateCode)
-		fmt.Printf("\t%d/100 %s\n", r.Score(), r.IsCurrentIndicator())
+	outputFormat, err := setOutputType(outputFormat)
+	if err != nil {
+		return err
+	}
+
+	switch outputFormat {
+	case outputTypeTEXT:
+		fmt.Printf("Found %d Business Entities:\n", searchResults.NumberOfRecords)
+
+		t, err := setOutputTypeTextTemplate("search", outputFormatTextTemplatePath)
+		if err != nil {
+			return err
+		}
+
+		for i, entity := range searchResults.SearchResultsRecord {
+			fmt.Printf("%d.\n", i+1)
+			err = t.Execute(os.Stdout, entity)
+			if err != nil {
+				return err
+			}
+		}
+	case outputTypeJSON:
+		b, err := json.Marshal(searchResults)
+		if err != nil {
+			return err
+		}
+		fmt.Println(string(b))
+	case outputTypeXML:
+		b, err := xml.Marshal(searchResults)
+		if err != nil {
+			return err
+		}
+		fmt.Println(string(b))
+	default:
+		return ErrInvalidOutputTypeMessage
 	}
 
 	return nil
