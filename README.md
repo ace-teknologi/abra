@@ -3,6 +3,8 @@
 [![Build Status](https://travis-ci.org/ace-teknologi/abra.svg?branch=master)](https://travis-ci.org/ace-teknologi/abra)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Face-teknologi%2Fabra.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Face-teknologi%2Fabra?ref=badge_shield)
 [![GoDoc Status](https://godoc.org/github.com/ace-teknologi/abra?status.svg)](http://godoc.org/github.com/ace-teknologi/abra)
+[![Maintainability](https://api.codeclimate.com/v1/badges/7d27d7ab62e538d6ced1/maintainability)](https://codeclimate.com/github/ace-teknologi/abra/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/7d27d7ab62e538d6ced1/test_coverage)](https://codeclimate.com/github/ace-teknologi/abra/test_coverage)
 
 A Go wrapper for the
 [Australian Business Register](https://abr.business.gov.au/abrxmlsearch/abrxmlsearch.asmx)
