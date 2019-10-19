@@ -1,11 +1,13 @@
-# Go ABN
+# Abra
 
-[![Build Status](https://travis-ci.org/ace-teknologi/go-abn.svg?branch=master)](https://travis-ci.org/ace-teknologi/go-abn)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fsjauld%2Fgo-abn.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fsjauld%2Fgo-abn?ref=badge_shield)
-[![GoDoc Status](https://godoc.org/github.com/ace-teknologi/go-abn?status.svg)](http://godoc.org/github.com/ace-teknologi/go-abn)
+[![Build Status](https://travis-ci.org/ace-teknologi/abra.svg?branch=master)](https://travis-ci.org/ace-teknologi/abra)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Face-teknologi%2Fabra.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Face-teknologi%2Fabra?ref=badge_shield)
+[![GoDoc Status](https://godoc.org/github.com/ace-teknologi/abra?status.svg)](http://godoc.org/github.com/ace-teknologi/abra)
 
 A Go wrapper for the
 [Australian Business Register](https://abr.business.gov.au/abrxmlsearch/abrxmlsearch.asmx)
+
+![Australian Business Register Applicance](./abra.png)
 
 ## Usage
 
@@ -17,7 +19,7 @@ A Go wrapper for the
 Search by the name fields of the ABN entries.
 
 ```bash
-goabn search -s "Bob's Country Bunker" --GUID 123-456-789
+abra search -s "Bob's Country Bunker" --GUID 123-456-789
 ```
 
 ### Find by ABN
@@ -25,13 +27,13 @@ goabn search -s "Bob's Country Bunker" --GUID 123-456-789
 When you have an ABN you can get further information. For example:
 
 ```bash
-goabn find-abn -s 33102417032 --GUID 123-456-789
+abra find-abn -s 33102417032 --GUID 123-456-789
 ```
 
 ### Find by ACN
 
 ```bash
-goabn find-acn -s 102417032 --GUID 123-456-789
+abra find-acn -s 102417032 --GUID 123-456-789
 ```
 
 ### Options
@@ -47,7 +49,7 @@ There are three output types available:
 Set via the `-f` or `--output-format` flag. Example:
 
 ```bash
-goabn search -s "Bob's Country Bunker" -f json --GUID 123-456-789
+abra search -s "Bob's Country Bunker" -f json --GUID 123-456-789
 ```
 
 #### Custom Text Output Template
@@ -58,7 +60,7 @@ template to customise the output as required.
 Set via the `-t` or `--text-output-template` flag. Example:
 
 ```bash
-goabn search -s "Bob's Country Bunker" -f "text" \
+abra search -s "Bob's Country Bunker" -f "text" \
   -t "./tmp/my-custom-template.gtpl" --GUID 123-456-789
 ```
 
@@ -72,13 +74,13 @@ Link: https://abr.business.gov.au/ABN/View?abn={{.ABN.IdentifierValue}}
 
 1.  Run:
     ```
-    go test ./abr
+    go test ./abra
     ```
 
 ## Documenation
 
-* [abr library documentation](https://godoc.org/github.com/ace-teknologi/go-abn/abr)
-* [command line interface documentation](https://godoc.org/github.com/ace-teknologi/go-abn/cmd)
+* [abr library documentation](https://godoc.org/github.com/ace-teknologi/abra/abra)
+* [command line interface documentation](https://godoc.org/github.com/ace-teknologi/abra/cmd)
 
 ## License
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fsjauld%2Fgo-abn.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fsjauld%2Fgo-abn?ref=badge_large)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Face-teknologi%2Fabra.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Face-teknologi%2Fabra?ref=badge_large)

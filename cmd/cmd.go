@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"text/template"
 
-	"github.com/ace-teknologi/go-abn/abr"
+	abra "github.com/ace-teknologi/abra/abra-lib"
 	"github.com/spf13/cobra"
 )
 
@@ -30,12 +30,12 @@ var outputFormatTextTemplatePath string
 var ErrInvalidOutputTypeMessage = fmt.Errorf("Invalid output type. Please choose from json, text, xml")
 
 var rootCmd = &cobra.Command{
-	Use:   "goabn",
-	Short: "Goabn looks up an ABN or ACN using the ABR",
+	Use:   "abra",
+	Short: "Abra looks up an ABN or ACN using the ABR",
 	Long: `A command line interface to the Australian Business Register.
-            More information available at https://github.com/ace-teknologi/go-abn`,
+More information available at https://github.com/ace-teknologi/abra`,
 	RunE: func(cmd *cobra.Command, arg []string) error {
-		fmt.Printf("[DEBUG] %v", arg)
+		fmt.Println("Maybe try abra help")
 		return nil
 	},
 }
@@ -55,11 +55,11 @@ func setGUID() error {
 	// If GUID wasn't set as a flag, check for an ENV
 	flag := rootCmd.Flags().Lookup(guidFlagName)
 	if flag.Value.String() == "" {
-		g, ok := os.LookupEnv(abr.GUIDEnvName)
+		g, ok := os.LookupEnv(abra.GUIDEnvName)
 		if ok {
 			flag.Value.Set(g)
 		} else {
-			return errors.New(abr.MissingGUIDError)
+			return errors.New(abra.MissingGUIDError)
 		}
 	}
 	return nil

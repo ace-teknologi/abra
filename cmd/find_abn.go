@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ace-teknologi/go-abn/abr"
+	abra "github.com/ace-teknologi/abra/abra-lib"
 	"github.com/spf13/cobra"
 )
 
@@ -39,7 +39,7 @@ func findABN() error {
 		return err
 	}
 
-	client, err := abr.NewWithGuid(GUID)
+	client, err := abra.NewWithGuid(GUID)
 	if err != nil {
 		return err
 	}

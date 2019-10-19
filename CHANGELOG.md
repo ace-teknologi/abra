@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## v0.2.0
 
+Note: this package was moved from sjauld/go-abn to aceteknologi/abra.
+
 ### Added
 
 * Command Line Interface support for search by name as `search`

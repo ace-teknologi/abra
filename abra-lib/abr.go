@@ -1,5 +1,5 @@
 // A Go wrapper for the Australian Business Register
-package abr
+package abra
 
 import (
 	"encoding/xml"
