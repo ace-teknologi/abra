@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/ace-teknologi/go-abn/abr"
+	abra "github.com/ace-teknologi/abra/abra-lib"
 	"github.com/spf13/cobra"
 )
 
@@ -13,8 +13,8 @@ func init() {
 
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "Print the version number of go-abn",
-	Long:  `All software has versions. This is go-abn's`,
+	Short: "Print the version number of abra",
+	Long:  `All software has versions. This is abra's`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		printVersion()
 		return nil
@@ -22,5 +22,5 @@ var versionCmd = &cobra.Command{
 }
 
 func printVersion() {
-	fmt.Printf("Go ABN version %s", abr.Version)
+	fmt.Printf("Abra version %s", abra.Version)
 }

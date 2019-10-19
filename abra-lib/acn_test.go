@@ -1,4 +1,4 @@
-package abr
+package abra
 
 import (
 	"testing"
@@ -106,9 +106,10 @@ var invalidACNs = []struct {
 	{"ONE"},
 	{"010 749 962 Z"},
 	{""},
+	{"ABCdefGHI"},
 }
 
-func TestValidateACNWithValidACNs(t *testing.T) {
+func TestValidateACN_ValidACNs(t *testing.T) {
 	for _, acn := range validACNs {
 		valid, err := ValidateACN(acn.acn)
 
@@ -123,7 +124,7 @@ func TestValidateACNWithValidACNs(t *testing.T) {
 	}
 }
 
-func TestValidateACNWithInvalidACNs(t *testing.T) {
+func TestValidateACN_InvalidACNs(t *testing.T) {
 	for _, acn := range invalidACNs {
 		valid, err := ValidateACN(acn.acn)
 
@@ -135,5 +136,20 @@ func TestValidateACNWithInvalidACNs(t *testing.T) {
 			t.Error("Valid when should be invalid")
 			continue
 		}
+	}
+}
+
+func TestIsValid_ValidACNs(t *testing.T) {
+	a := &ACN{
+		IdentifierValue: "009 999 964",
+	}
+
+	valid, err := a.IsValid()
+
+	if err != nil {
+		t.Error(err)
+	}
+	if valid != true {
+		t.Error("Invalid when should be valid")
 	}
 }
