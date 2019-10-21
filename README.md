@@ -81,7 +81,7 @@ Link: https://abr.business.gov.au/ABN/View?abn={{.ABN.IdentifierValue}}
 
 ## Documenation
 
-* [abr library documentation](https://godoc.org/github.com/ace-teknologi/abra/abra)
+* [abr library documentation](https://godoc.org/github.com/ace-teknologi/abra/abra-lib)
 * [command line interface documentation](https://godoc.org/github.com/ace-teknologi/abra/cmd)
 
 ## License
