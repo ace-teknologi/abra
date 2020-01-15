@@ -214,6 +214,81 @@ func NewWithGuid(guid string) (*Client, error) {
 	return client, nil
 }
 
+type numberType int
+
+const (
+	numberTypeNone numberType = iota
+	numberTypeABN
+	numberTypeACN
+)
+
+// Search attempts to intelligently work out what you're looking for
+func (c *Client) Search(text string) (*BusinessEntity, error) {
+	zzz, res := entityNumberFromString(text)
+
+	switch res {
+	case numberTypeNone:
+		return nil, fmt.Errorf("Not implemented")
+	case numberTypeABN:
+		return c.SearchByABN(zzz, false)
+	case numberTypeACN:
+		return c.SearchByACN(zzz, false)
+	}
+
+	return nil, fmt.Errorf("Unexpectedly reached an unreachable piece of code")
+}
+
+func entityNumberFromString(text string) (string, numberType) {
+	stringLen := len(text)
+	for i := 0; i < stringLen; i++ {
+		if charCheck(text[i]) != charCheckNumber {
+			continue
+		}
+
+		result := []byte{text[i]}
+		// get numbers until they stop
+		i++
+		for ; i < stringLen; i++ {
+			switch charCheck(text[i]) {
+			case charCheckWhitespace:
+				continue
+			case charCheckNumber:
+				result = append(result, text[i])
+			case charCheckNotNumber:
+				break
+			}
+		}
+
+		// now check what we got
+		switch len(result) {
+		case 9:
+			return string(result), numberTypeACN
+		case 11:
+			return string(result), numberTypeABN
+		}
+	}
+
+	return "", numberTypeNone
+}
+
+type charType int
+
+const (
+	charCheckNotNumber charType = iota
+	charCheckNumber
+	charCheckWhitespace
+)
+
+func charCheck(i byte) charType {
+	if i == 32 { // space
+		return charCheckWhitespace
+	}
+	if i > 47 && i < 58 { // 0-9
+		return charCheckNumber
+	}
+	return charCheckNumber
+}
+
 // SearchByABN is an alias for SearchByABNv201408
 func (c *Client) SearchByABN(abn string, hist bool) (*BusinessEntity, error) {
 	return c.SearchByABNv201408(abn, hist)
@@ -407,6 +482,17 @@ func (c *Client) SearchByNameAdvancedSimpleProtocol2017(name string, params *Nam
 	}
 
 	return resp.Response.SearchResultsList, nil
+}
+
+// SearchByNameBestGuess takes the first result from the name search and returns
+// an ABN search
+func (c *Client) SearchByNameBestGuess(name string, params *NameSearchParams) (*BusinessEntity, error) {
+	list, err := c.SearchByName(name, params)
+	if err != nil {
+		return nil, err
+	}
+
+	return c.Search(list.SearchResultsRecord[0].ABN.String())
 }
 
 func (c *Client) newRequest(method, path string, body io.Reader) (*http.Request, error) {

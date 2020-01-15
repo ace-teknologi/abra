@@ -1,4 +1,3 @@
-// A Go wrapper for the Australian Business Register
 package abra
 
 import (
