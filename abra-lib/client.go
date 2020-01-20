@@ -193,7 +193,7 @@ func NewClient() (*Client, error) {
 	return NewWithGuid(guid)
 }
 
-// NewClientWithGuid returns a pointer to an initalized instance of a Client,
+// NewWithGuid returns a pointer to an initalized instance of a Client,
 // configured with a `guid`
 func NewWithGuid(guid string) (*Client, error) {
 	rawurl, ok := os.LookupEnv("ABR_ENDPOINT")
@@ -248,6 +248,7 @@ func entityNumberFromString(text string) (string, numberType) {
 		result := []byte{text[i]}
 		// get numbers until they stop
 		i++
+	CheckLoop:
 		for ; i < stringLen; i++ {
 			switch charCheck(text[i]) {
 			case charCheckWhitespace:
@@ -255,7 +256,7 @@ func entityNumberFromString(text string) (string, numberType) {
 			case charCheckNumber:
 				result = append(result, text[i])
 			case charCheckNotNumber:
-				break
+				break CheckLoop
 			}
 		}
 
@@ -286,7 +287,7 @@ func charCheck(i byte) charType {
 	if i > 47 && i < 58 { // 0-9
 		return charCheckNumber
 	}
-	return charCheckNumber
+	return charCheckNotNumber
 }
 
 // SearchByABN is an alias for SearchByABNv201408
