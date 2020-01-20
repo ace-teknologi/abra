@@ -1,0 +1,24 @@
+# You can publish a prerelease just by tagging a commit
+name: PreRelease
+
+on:
+  tags:
+    - '*-rc*'
+    - '*-alpha*'
+    - '*-beta*'
+
+jobs:
+  release:
+    strategy:
+      matrix:
+        goarch: ["386", "amd64"]
+        goos: ["darwin", "linux", "windows"]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Compile and release
+      uses: ngs/go-release.action@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GOARCH: ${{ matrix.goarch }}
+        GOOS: ${{ matrix.goos }}
