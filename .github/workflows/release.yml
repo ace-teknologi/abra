@@ -1,23 +1,8 @@
-name: TagAndRelease
+name: Release
 
-on:
-  push:
-    branches:
-    - master
+on: release
 
 jobs:
-  tag:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@master
-    - name: Bump version and push tag
-      uses: anothrNick/github-tag-action@master
-      env:
-        DEFAULT_BUMP: patch
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        REPO_OWNER: ace-teknologi
-        WITH_V: true
   release:
     strategy:
       matrix:
