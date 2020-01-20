@@ -2,10 +2,11 @@
 name: PreRelease
 
 on:
-  tags:
-    - '*-rc*'
-    - '*-alpha*'
-    - '*-beta*'
+  push:
+    tags:
+        - '*-rc*'
+        - '*-alpha*'
+        - '*-beta*'
 
 jobs:
   release:
