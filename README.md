@@ -76,7 +76,7 @@ Link: https://abr.business.gov.au/ABN/View?abn={{.ABN.IdentifierValue}}
 
 1.  Run:
     ```
-    go test ./abra
+    go test ./...
     ```
 
 ## Documenation

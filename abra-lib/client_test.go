@@ -54,6 +54,12 @@ func TestABRClient(t *testing.T) {
 	if client.BaseURL.String() != BaseURL {
 		t.Errorf("Expected endpoint to be %s, got %s", BaseURL, client.BaseURL.String())
 	}
+
+	var c Abra
+	c = client
+	if c == nil {
+		t.Errorf("This is just to test that Client implements Abra")
+	}
 }
 
 func TestABRClientNoEnvSet(t *testing.T) {
@@ -258,4 +264,251 @@ func TestSearchByNameWithNonEmptyString(t *testing.T) {
 		}
 	}
 	return
+}
+
+func TestEntityNumberFromString(t *testing.T) {
+	number, ty := entityNumberFromString(" 0123456789 ")
+	if ty != numberTypeNone {
+		t.Errorf("Expected numberTypeNone, got %d", ty)
+	}
+
+	if number != "" {
+		t.Errorf("Expected blank, got %v", number)
+	}
+
+	number, ty = entityNumberFromString("12-345-678-912")
+	if ty != numberTypeNone {
+		t.Errorf("Expected numberTypeNone, got %d", ty)
+	}
+
+	if number != "" {
+		t.Errorf("Expected blank, got %v", number)
+	}
+
+	number, ty = entityNumberFromString(" 12 34 56 789 ")
+	if ty != numberTypeACN {
+		t.Errorf("Expected numberTypeACN, got %d", ty)
+	}
+
+	if number != "123456789" {
+		t.Errorf("Expected 123456789, got %v", number)
+	}
+
+	number, ty = entityNumberFromString(" 12 34 56 789 12")
+	if ty != numberTypeABN {
+		t.Errorf("Expected numberTypeABN, got %d", ty)
+	}
+
+	if number != "12345678912" {
+		t.Errorf("Expected 12345678912, got %v", number)
+	}
+
+	number, ty = entityNumberFromString(" 3z4 56 789 12")
+	if ty != numberTypeNone {
+		t.Errorf("Expected numberTypeABN, got %d", ty)
+	}
+
+	if number != "" {
+		t.Errorf("Expected blank string, got %v", number)
+	}
+
+	number, ty = entityNumberFromString(" 3z 56 789 12")
+	if ty != numberTypeNone {
+		t.Errorf("Expected numberTypeABN, got %d", ty)
+	}
+
+	if number != "" {
+		t.Errorf("Expected blank string, got %v", number)
+	}
+}
+
+func TestSearchResultsName(t *testing.T) {
+	s := &SearchResultsRecord{
+		MainName: &SearchResultName{
+			OrganisationName: "Bob's Warehouse",
+		},
+	}
+
+	if s.Name() != "Bob's Warehouse" {
+		t.Errorf("Expected Bob's Warehouse, got %v", s.Name())
+	}
+
+	s = &SearchResultsRecord{
+		MainTradingName: &SearchResultName{
+			OrganisationName: "Bob's Warehouse",
+		},
+	}
+
+	if s.Name() != "Bob's Warehouse" {
+		t.Errorf("Expected Bob's Warehouse, got %v", s.Name())
+	}
+
+	s = &SearchResultsRecord{
+		BusinessName: &SearchResultName{
+			OrganisationName: "Bob's Warehouse",
+		},
+	}
+
+	if s.Name() != "Bob's Warehouse" {
+		t.Errorf("Expected Bob's Warehouse, got %v", s.Name())
+	}
+
+	s = &SearchResultsRecord{
+		OtherTradingName: &SearchResultName{
+			OrganisationName: "Bob's Warehouse",
+		},
+	}
+
+	if s.Name() != "Bob's Warehouse" {
+		t.Errorf("Expected Bob's Warehouse, got %v", s.Name())
+	}
+
+	s = &SearchResultsRecord{
+		LegalName: &SearchResultName{
+			FullName: "Bob's Warehouse",
+		},
+	}
+
+	if s.Name() != "Bob's Warehouse" {
+		t.Errorf("Expected Bob's Warehouse, got %v", s.Name())
+	}
+
+	s = &SearchResultsRecord{}
+
+	if s.Name() != "" {
+		t.Errorf("Expected an empty string, got %v", s.Name())
+	}
+}
+
+func TestSearchResultsScore(t *testing.T) {
+	s := &SearchResultsRecord{
+		MainName: &SearchResultName{
+			Score: 69,
+		},
+	}
+
+	if s.Score() != 69 {
+		t.Errorf("Expected 69, got %d", s.Score())
+	}
+
+	s = &SearchResultsRecord{
+		MainTradingName: &SearchResultName{
+			Score: 69,
+		},
+	}
+
+	if s.Score() != 69 {
+		t.Errorf("Expected 69, got %d", s.Score())
+	}
+
+	s = &SearchResultsRecord{
+		BusinessName: &SearchResultName{
+			Score: 69,
+		},
+	}
+
+	if s.Score() != 69 {
+		t.Errorf("Expected 69, got %d", s.Score())
+	}
+
+	s = &SearchResultsRecord{
+		OtherTradingName: &SearchResultName{
+			Score: 69,
+		},
+	}
+
+	if s.Score() != 69 {
+		t.Errorf("Expected 69, got %d", s.Score())
+	}
+
+	s = &SearchResultsRecord{
+		LegalName: &SearchResultName{
+			Score: 69,
+		},
+	}
+
+	if s.Score() != 69 {
+		t.Errorf("Expected 69, got %d", s.Score())
+	}
+
+	s = &SearchResultsRecord{}
+
+	if s.Score() != 0 {
+		t.Errorf("Expected 0, got %d", s.Score())
+	}
+}
+
+func TestSearchResultsIsCurrentIndicator(t *testing.T) {
+	s := &SearchResultsRecord{
+		MainName: &SearchResultName{
+			IsCurrentIndicator: "yo",
+		},
+	}
+
+	if s.IsCurrentIndicator() != "yo" {
+		t.Errorf("Expected yo, got %v", s.IsCurrentIndicator())
+	}
+
+	s = &SearchResultsRecord{
+		MainTradingName: &SearchResultName{
+			IsCurrentIndicator: "yo",
+		},
+	}
+
+	if s.IsCurrentIndicator() != "yo" {
+		t.Errorf("Expected yo, got %v", s.IsCurrentIndicator())
+	}
+
+	s = &SearchResultsRecord{
+		BusinessName: &SearchResultName{
+			IsCurrentIndicator: "yo",
+		},
+	}
+
+	if s.IsCurrentIndicator() != "yo" {
+		t.Errorf("Expected yo, got %v", s.IsCurrentIndicator())
+	}
+
+	s = &SearchResultsRecord{
+		OtherTradingName: &SearchResultName{
+			IsCurrentIndicator: "yo",
+		},
+	}
+
+	if s.IsCurrentIndicator() != "yo" {
+		t.Errorf("Expected yo, got %v", s.IsCurrentIndicator())
+	}
+
+	s = &SearchResultsRecord{
+		LegalName: &SearchResultName{
+			IsCurrentIndicator: "yo",
+		},
+	}
+
+	if s.IsCurrentIndicator() != "yo" {
+		t.Errorf("Expected yo, got %v", s.IsCurrentIndicator())
+	}
+
+	s = &SearchResultsRecord{}
+
+	if s.IsCurrentIndicator() != "" {
+		t.Errorf("Expected blank string, got %v", s.IsCurrentIndicator())
+	}
+}
+
+func TestCharCheck(t *testing.T) {
+	c := charCheck([]byte("a")[0])
+	if charCheckNotNumber != c {
+		t.Errorf("Expected %d, got %d", charCheckNotNumber, c)
+	}
+
+	c = charCheck([]byte(" ")[0])
+	if charCheckWhitespace != c {
+		t.Errorf("Expected %d, got %d", charCheckWhitespace, c)
+	}
+
+	c = charCheck([]byte("3")[0])
+	if charCheckNumber != c {
+		t.Errorf("Expected %d, got %d", charCheckNumber, c)
+	}
 }
